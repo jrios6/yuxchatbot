@@ -1,6 +1,8 @@
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
+var request = require('request');
+
 
 var useEmulator = (process.env.NODE_ENV == 'development');
 
@@ -13,35 +15,103 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 
 var bot = new builder.UniversalBot(connector);
 
-const LuisModelUrl = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/5061676d-ffa3-4167-94cf-a8a3cb623dfd?subscription-key=a6b43fbe1d814bc7a807e3db1bd079cd&verbose=true';
-var recogniser = new builder.LuisRecognizer(LuisModelUrl);
+const LuisModelUrl = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/b2fb8232-992d-4838-8caf-b6d05bfe08cc?subscription-key=7540fc2268fa47f7a57ea60184c2d7fb&verbose=true&q=';
+var recognizer = new builder.LuisRecognizer(LuisModelUrl);
+var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
+bot.dialog('/', dialog);
 
-var intents = new builder.IntentDialog({recognizers:[recogniser]});
-intents.matches('greeting','/sayHi');
-
-bot.dialog('/sayHi', [
+//Dialogs
+dialog.matches('greetings', [
     function (session, args, next) {
-        builder.Prompts.text(session, 'Hi! What is your name?');
         if (!session.userData.name) {
-            session.beginDialog('/profile');
+            session.beginDialog('/profiling');
         } else {
-            next();
+            session.beginDialog('/getimage');
         }
-    },
-    function (session, results) {
-        session.send('Hello %s!', session.userData.name);
     }
 ]);
 
-bot.dialog('/profile', [
+bot.dialog('/getimage', [
+  function (session, results) {
+    builder.Prompts.attachment(session, "Upload a picture for me to search.");
+  },
+  function (session, results) {
+    if (results.response) {
+      console.log("Image Uploaded")
+      console.log(results.response[0].contentUrl);
+      builder.Prompts.choice(session, "What kind of search would you like to perform?",
+        ["Find me the best combination","Find me something similar"]);
+    } else {
+      session.beginDialog('/getimage');
+    }
+  },
+  function (session, results) {
+    if (results.response.index == 0) {
+      session.send("Please wait while I search for the best combination...");
+      request.post(
+          'http://yuxmobilebackend.azurewebsites.net/api/date',
+          { json: { key: 'value' } },
+          function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                  console.log(body);
+                  session.send(body.currentTime);
+              }
+          }
+      );
+    } else if (results.response.index == 1) {
+      session.send("Please wait while I search for something similar...");
+      //Make POST request with image url for best combination
+    }
+  }
+]);
+
+//Dialog for profiling of user
+bot.dialog('/profiling', [
     function (session) {
-        builder.Prompts.text(session, 'Hi! What is your name?');
+        builder.Prompts.choice(session, "Hi there! I’m Yux, your personal fashion search engine! To give you more personalised results, I will be asking you five simple questions.",
+          ["Start","Skip"]);
     },
     function (session, results) {
-        session.userData.name = results.response;
-        session.endDialog();
-    }
+      if (results.response.entity == 'Start') {
+          builder.Prompts.choice(session, "Q1. Do you shop for clothes in stores or online more?",
+            ["In Stores", "Online"]);
+      } else {
+        //Skip
+      }
+    },
+    function (session, results) {
+      //Save results.response.entity
+      builder.Prompts.choice(session, "Q2. How much do you spend on clothes on average each month?",
+        ["Less Than $250", "$250 to $1000", "More Than $1000"]);
+    },
+    function (session, results) {
+      //Save results.response.entity
+      builder.Prompts.text(session, "Q3. What’s your occupation?");
+    },
+    function (session, results) {
+      //Save results.response.entity
+      builder.Prompts.text(session, "Q4. What’s your age?");
+    },
+    function (session, results) {
+      //Save results.response.entity
+      builder.Prompts.text(session, "Q5. What’s your fashion idol?");
+    },
+    function (session, results) {
+      //Save results.response.entity
+      session.send("Thanks for completing the profiling! Here's what I can do:");
+      session.beginDialog('/yuxfeatures');
+    },
 ]);
+
+//Dialog that describes the features of Yux
+bot.dialog('/yuxfeatures', [
+  function (session) {
+      session.send("If you give me a picture, I can find clothes that look similar to it or combinations of clothes from Zalora that looks good with it.");
+      //session.send("I can also tell you if a piece of clothing or pair of shoes is a good buy! :)");
+      //session.send("I can also give you basic fashion advice or tell you more about recent trends in fashion.");
+      session.endDialog();
+  },
+])
 
 if (useEmulator) {
     var restify = require('restify');
@@ -49,7 +119,7 @@ if (useEmulator) {
     server.listen(3978, function() {
         console.log('test bot endpont at http://localhost:3978/api/messages');
     });
-    server.post('/api/messages', connector.listen());    
+    server.post('/api/messages', connector.listen());
 } else {
     module.exports = { default: connector.listen() }
 }
