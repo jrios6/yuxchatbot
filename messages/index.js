@@ -38,7 +38,7 @@ bot.dialog('/getimage', [
   function (session, results) {
     if (results.response) {
       console.log("Image Uploaded")
-      console.log(results.response[0].contentUrl);
+      session.send(results.response[0].contentUrl);
       builder.Prompts.choice(session, "What kind of search would you like to perform?",
         ["Find me the best combination","Find me something similar"]);
     } else {
