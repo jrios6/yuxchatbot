@@ -23,7 +23,7 @@ bot.dialog('/', dialog);
 //Dialogs
 dialog.matches('greetings', [
     function (session, args, next) {
-        if (!session.userData.name) {
+        if (session.userData.name) {
             session.beginDialog('/profiling');
         } else {
             session.beginDialog('/getimage');
