@@ -1,7 +1,7 @@
 "use strict";
 var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
-var request = require('request-promise').defaults({ encoding: null });
+var request = require('request');
 
 //Dialog Modules
 var help = require("./dialogs/help.js");
@@ -29,23 +29,9 @@ bot.dialog('/', dialog);
 dialog.onDefault(function (session, args, next) {
   var msg = session.message;
   if (msg.attachments.length) {
-
-    // Message with attachment, proceed to download it.
+    // Message with attachment, proceed to perform query
     var attachment = msg.attachments[0];
-    session.send(attachment.contentUrl);
     session.beginDialog('/imagequery', attachment.contentUrl);
-    // var fileDownload = request(attachment.contentUrl);
-    // fileDownload.then(
-    //     function (response) {
-    //
-    //         // Send reply with attachment type & size
-    //         var reply = new builder.Message(session)
-    //             .text('Attachment of %s type and size of %s bytes received.', attachment.contentType, response.length);
-    //         session.send(reply);
-    //
-    //     }).catch(function (err) {
-    //         console.log('Error downloading attachment:', { statusCode: err.statusCode, message: err.response.statusMessage });
-    //     });
   } else {
     session.send("Say Hi to get started!");
   }
