@@ -11,23 +11,21 @@ let getImage = [
   function (session, args) {
     //Saves image url from args to dialogData
     session.dialogData.url = args || {};
-    // var msg = new builder.Message(session)
-    //         .attachments([
-    //             new builder.HeroCard(session)
-    //                 .title("Hero Card")
-    //                 .subtitle("Space Needle")
-    //                 .text("The <b>Space Needle</b> is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
-    //                 .images([
-    //                     builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
-    //                 ])
-    //                 .tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
-    //         ]);
-    // session.send(msg);
-    builder.Prompts.choice(session, "What kind of search would you like to perform?",
-      ["Find me the best combination","Find me something similar"], {listStyle: builder.ListStyle["button"]});
-  },
+    var msg = new builder.Message(session)
+            .attachments([
+                new builder.HeroCard(session)
+                    .text("What kind of search would you like to perform?")
+                    .buttons([
+                              builder.CardAction.dialogAction(session, 'findCombination', null, 'Find me the best combination'),
+                              builder.CardAction.dialogAction(session, 'findSimilar', null, 'Find me something similar')
+                          ])
+            ]);
+    session.send(msg);
+  }
+];
+
+let findCombination = [
   function (session, results) {
-    if (results.response.index == 0) {
       session.send("Please wait while I search for the best combination...");
       session.sendTyping();
       const geturl = `http://yuxmobilebackend.azurewebsites.net/api/retrieveOutfitCombos?imgurl=${session.dialogData.url.toString()}`;
@@ -39,7 +37,13 @@ let getImage = [
             session.endDialog("Sorry, there was an error. Please try again.")
           }
       });
-    } else if (results.response.index == 1) {
+  }
+];
+
+
+
+let findSimilar = [
+  function (session, args) {
       session.send("Please wait while I search for something similar...");
       session.sendTyping();
       const geturl = `http://yuxmobilebackend.azurewebsites.net/api/retrieveSimilarClothings?imgurl=${session.dialogData.url.toString()}`;
@@ -51,8 +55,9 @@ let getImage = [
             session.endDialog("Sorry, there was an error. Please try again.")
           }
       });
-    }
   }
 ];
 
 module.exports.getImage = getImage;
+module.exports.findSimilar = findSimilar;
+module.exports.findCombination = findCombination;
