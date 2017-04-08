@@ -40,21 +40,21 @@ dialog.onDefault(function (session, args, next) {
                 .attachments([
                   new builder.HeroCard(session)
                     .title("Matching <Clothing Type>")
-                    .subtitle("<Description>")
+                    .subtitle("<Description> Price: $<Price>")
                     .images([
-                        builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
+                        builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy now at $<Price>!')
+                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
                     ]),
                   new builder.HeroCard(session)
                       .title("Matching <Clothing Type>")
                       .subtitle("<Description>")
                       .images([
-                          builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
+                          builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
                       ])
                       .buttons([
-                          builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy now at $<Price>!')
+                          builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
                       ])
                     ]);
 
