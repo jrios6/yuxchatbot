@@ -34,32 +34,7 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
-    //session.send("Say Hi to get started!");
-    var reply = new builder.Message(session)
-                .attachmentLayout(builder.AttachmentLayout.carousel)
-                .attachments([
-                  new builder.HeroCard(session)
-                    .title("Matching <Clothing Type>")
-                    .subtitle("<Description> Price: $<Price>")
-                    .images([
-                        builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                    ])
-                    .buttons([
-                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                    ]),
-                  new builder.HeroCard(session)
-                      .title("Matching <Clothing Type>")
-                      .subtitle("<Description>")
-                      .images([
-                          builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                      ])
-                      .buttons([
-                          builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                      ])
-                    ]);
-
-    session.send("sda");
-    session.endDialog(reply);
+    session.send("Say Hi to get started!");
   }
 })
 
