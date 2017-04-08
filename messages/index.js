@@ -27,8 +27,8 @@ bot.dialog('/', dialog);
 
 
 //Herocard Actions References
-bot.beginDialogAction('findCombination', '/findCombination');
-bot.beginDialogAction('findSimilar', '/findSimilar');
+// bot.beginDialogAction('findCombination', '/findCombination');
+// bot.beginDialogAction('findSimilar', '/findSimilar');
 
 
 //Default handles case where user uploads image directly
@@ -39,20 +39,7 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
-    session.send("Abcd");
-
-    // var msg = new builder.Message(session)
-    //         .attachments([
-    //             new builder.HeroCard(session)
-    //                 .text("What kind of search would you like to perform?")
-    //                 .buttons([
-    //                           builder.CardAction.dialogAction(session, 'yuxfeatures', null, 'Find me the best combination'),
-    //                           builder.CardAction.dialogAction(session, 'yuxfeatures', null, 'Find me something similar')
-    //                       ])
-    //         ]);
-    //
-    // session.send(msg);
-    //session.send("Say Hi to get started!");
+    session.send("Say Hi to get started!");
   }
 })
 
@@ -71,8 +58,8 @@ dialog.matches('greetings', [
 
 //Dialog for handling image queries
 bot.dialog('/imagequery', getImage.getImage);
-bot.dialog('/findCombination', getImage.findCombination);
-bot.dialog('/findSimilar', getImage.findSimilar);
+// bot.dialog('/findCombination', getImage.findCombination);
+// bot.dialog('/findSimilar', getImage.findSimilar);
 
 //Dialog for deleting user's profile
 dialog.matches(/^delete profile/i, deleteProfile.confirm);
