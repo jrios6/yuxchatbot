@@ -49,7 +49,7 @@ dialog.matches('greetings', [
     //     //Starts profiling user
     //     session.beginDialog('/profiling');
     //   }
-    // }
+    }
 ]);
 
 //Dialog for handling image queries
