@@ -34,6 +34,7 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
+
     session.send("Say Hi to get started!");
   }
 })

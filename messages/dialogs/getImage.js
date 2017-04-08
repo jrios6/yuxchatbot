@@ -17,80 +17,44 @@ let getImage = [
         if (results.response.index == 0) {
             session.send("Please wait while I search for the best combination...");
             session.sendTyping();
-            const geturl = `http://yuxmobilebackend.azurewebsites.net/api/retrieveOutfitCombos?imgurl=${session.dialogData.url.toString()}`;
 
-            request(geturl, function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    //TODO: Parse JSON Response and return user result in Hero Cards/ Carousel
-                    var reply = new builder.Message(session)
-                        .attachmentLayout(builder.AttachmentLayout.carousel)
-                        .attachments([
-                            new builder.HeroCard(session)
-                            .title("Matching <Clothing Type>")
-                            .subtitle("$<Price>, <Description> ")
-                            .images([
-                                builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                            ])
-                            .buttons([
-                                builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                            ]),
-                            new builder.HeroCard(session)
-                            .title("Matching <Clothing Type>")
-                            .subtitle("$<Price>, <Description>")
-                            .images([
-                                builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                            ])
-                            .buttons([
-                                builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                            ])
-                        ]);
-                    session.endDialog(reply);
-                } else {
-                    session.endDialog("Sorry, there was an error. Please try again.")
-                }
-            });
+
+
         } else if (results.response.index == 1) {
             session.send("Please wait while I search for something similar...");
             session.sendTyping();
-            const geturl = `http://yuxmobilebackend.azurewebsites.net/api/retrieveSimilarClothings?imgurl=${session.dialogData.url.toString()}`;
-            request(geturl, function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    //TODO: Parse JSON Response and return user result in Hero Cards/ Carousel
-                    var reply = new builder.Message(session)
-                        .attachmentLayout(builder.AttachmentLayout.carousel)
-                        .attachments([
-                            new builder.HeroCard(session)
-                            .title("<Title>, $<Price>")
-                            .subtitle("<Description>")
-                            .images([
-                                builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                            ])
-                            .buttons([
-                                builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                            ]),
-                            new builder.HeroCard(session)
-                            .title("<Title>, $<Price>")
-                            .subtitle("<Description>")
-                            .images([
-                                builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                            ])
-                            .buttons([
-                                builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                            ]),
-                            new builder.HeroCard(session)
-                            .title("<Title>, $<Price>")
-                            .subtitle("<Description>")
-                            .images([
-                                builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
-                            ])
-                            .buttons([
-                                builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy Now')
-                            ])
-                        ]);
-                    session.endDialog(reply);
-                } else {
-                    session.endDialog("Sorry, there was an error. Please try again.")
+
+            request({
+              url: 'http://yuxmobilebackend.azurewebsites.net/api/retrieveSimilarClothings',
+              method: 'POST',
+              json: {'image_url': session.dialogData.url.toString()}
+            }, function(err, response, body) {
+              if (!err && response.statusCode == 200) {
+                console.log(body.results[0].title)
+                var cardArray = new Array();
+                for (var i=0; i<body.results.length; i++) {
+
+                  var newCard = new builder.HeroCard(session)
+                  .title(body.results[i].title)
+                  .subtitle('Listed Price: $' + body.results[i].price)
+                  .images([
+                      builder.CardImage.create(session, body.results[i].image)
+                  ])
+                  .buttons([
+                      builder.CardAction.openUrl(session, body.results[i].url, 'Buy Now')
+                  ])
+
+                  cardArray.push(newCard);
                 }
+
+                var reply = new builder.Message(session)
+                    .attachmentLayout(builder.AttachmentLayout.carousel)
+                    .attachments(cardArray);
+                session.send(reply)
+              } else {
+                console.log(err)
+                session.endDialog("Sorry, there was an error. Please try again.")
+              }
             });
         }
     }
