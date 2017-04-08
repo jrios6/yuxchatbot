@@ -33,7 +33,9 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
-    session.send("Say Hi to get started!");
+    builder.Prompts.choice(session, "What kind of search would you like to perform?",
+      ["Find me the best combination","Find me something similar"], {listStyle: builder.ListStyle["button"]});
+    //session.send("Say Hi to get started!");
   }
 })
 
