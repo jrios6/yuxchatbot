@@ -41,24 +41,25 @@ dialog.onDefault(function (session, args, next) {
 //Dialogs
 dialog.matches('greetings', [
  (session) => {
-      if (session.userData.choice1) {
-        //User has already been profiled
-        session.beginDialog('/yuxfeatures');
-      } else {
-        //Starts profiling user
-        session.beginDialog('/profiling');
-      }
-    }
+   session.beginDialog('/yuxfeatures');
+    //   if (session.userData.choice1) {
+    //     //User has already been profiled
+    //     session.beginDialog('/yuxfeatures');
+    //   } else {
+    //     //Starts profiling user
+    //     session.beginDialog('/profiling');
+    //   }
+    // }
 ]);
 
 //Dialog for handling image queries
 bot.dialog('/imagequery', getImage.getImage);
 
 //Dialog for deleting user's profile
-dialog.matches(/^delete profile/i, deleteProfile.confirm);
+//dialog.matches(/^delete profile/i, deleteProfile.confirm);
 
 //Dialog for profiling of user
-bot.dialog('/profiling', profiling.questions);
+//bot.dialog('/profiling', profiling.questions);
 
 //Dialog that describes the features of Yux
 bot.dialog('/yuxfeatures', help.yuxfeatures);
