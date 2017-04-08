@@ -27,7 +27,7 @@ let getImage = [
                         .attachments([
                             new builder.HeroCard(session)
                             .title("Matching <Clothing Type>")
-                            .subtitle("<Description> \nPrice: $<Price>")
+                            .subtitle("$<Price>, <Description> ")
                             .images([
                                 builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
                             ])
@@ -36,7 +36,7 @@ let getImage = [
                             ]),
                             new builder.HeroCard(session)
                             .title("Matching <Clothing Type>")
-                            .subtitle("<Description>")
+                            .subtitle("$<Price>, <Description>")
                             .images([
                                 builder.CardImage.create(session, 'https://scontent.xx.fbcdn.net/v/t34.0-12/17841911_10155115378683186_898313673_n.jpg?oh=d53dd82ea633f359baa58dbb932e549d&oe=58EB585B')
                             ])
