@@ -11,8 +11,20 @@ let getImage = [
   function (session, args) {
     //Saves image url from args to dialogData
     session.dialogData.url = args || {};
+    // var msg = new builder.Message(session)
+    //         .attachments([
+    //             new builder.HeroCard(session)
+    //                 .title("Hero Card")
+    //                 .subtitle("Space Needle")
+    //                 .text("The <b>Space Needle</b> is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
+    //                 .images([
+    //                     builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+    //                 ])
+    //                 .tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+    //         ]);
+    // session.send(msg);
     builder.Prompts.choice(session, "What kind of search would you like to perform?",
-      ["Find me the best combination","Find me something similar"]);
+      ["Find me the best combination","Find me something similar"], {listStyle: builder.ListStyle["button"]});
   },
   function (session, results) {
     if (results.response.index == 0) {
