@@ -7,6 +7,11 @@ var request = require('request');
 //For local testing
 const fakeurl = 'https://webchat.botframework.com/attachments/c8ca4c4b904d49e9a36ee4714e090f67/0000001/0/3293.jpg?t=08qroFrsG0s.dAA.YwA4AGMAYQA0AGMANABiADkAMAA0AGQANAA5AGUAOQBhADMANgBlAGUANAA3ADEANABlADAAOQAwAGYANgA3AC0AMAAwADAAMAAwADAAMQA.ftnHjZGg0gE.ZWEciW6R4Vs.oV4e94r7XxC_59uOcqbzjO1MnhX3xIeTf5jebS7mRtc';
 
+//Herocard Actions References
+// bot.beginDialogAction('findCombination', '/findCombination');
+
+
+
 let getImage = [
   function (session, args) {
     //Saves image url from args to dialogData

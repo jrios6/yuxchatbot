@@ -26,11 +26,6 @@ var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', dialog);
 
 
-//Herocard Actions References
-// bot.beginDialogAction('findCombination', '/findCombination');
-// bot.beginDialogAction('findSimilar', '/findSimilar');
-
-
 //Default handles case where user uploads image directly
 dialog.onDefault(function (session, args, next) {
   var msg = session.message;
@@ -39,7 +34,32 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
-    session.send("Say Hi to get started!");
+    //session.send("Say Hi to get started!");
+    var reply = new builder.Message(session)
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments([
+                  new builder.HeroCard(session)
+                    .title("Matching <Clothing Type>")
+                    .subtitle("<Description>")
+                    .images([
+                        builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy now at $<Price>!')
+                    ]),
+                  new builder.HeroCard(session)
+                      .title("Matching <Clothing Type>")
+                      .subtitle("<Description>")
+                      .images([
+                          builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
+                      ])
+                      .buttons([
+                          builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Buy now at $<Price>!')
+                      ])
+                    ]);
+
+    session.send("sda");
+    session.endDialog(reply);
   }
 })
 
@@ -58,8 +78,6 @@ dialog.matches('greetings', [
 
 //Dialog for handling image queries
 bot.dialog('/imagequery', getImage.getImage);
-// bot.dialog('/findCombination', getImage.findCombination);
-// bot.dialog('/findSimilar', getImage.findSimilar);
 
 //Dialog for deleting user's profile
 dialog.matches(/^delete profile/i, deleteProfile.confirm);
