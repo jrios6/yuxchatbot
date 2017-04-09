@@ -39,18 +39,22 @@ dialog.onDefault(function (session, args, next) {
   }
 })
 
-//Dialogs
+//Dialog Matching
 dialog.matches('greetings', [
  (session) => {
    session.beginDialog('/yuxfeatures');
     }
 ]);
 
-//Dialog for handling image queries
-bot.dialog('/imagequery', getImage.getImage);
+dialog.matches('help_features', [
+  (session) => {
+    session.beginDialog('/yuxfeatures');
+  }
+]);
 
-//Dialog that describes the features of Yux
-bot.dialog('/yuxfeatures', help.yuxfeatures);
+//Dialogs
+bot.dialog('/imagequery', getImage.getImage); //for handling image queries
+bot.dialog('/yuxfeatures', help.yuxfeatures); //describes the features of Yux
 
 if (useEmulator) {
     var restify = require('restify');
