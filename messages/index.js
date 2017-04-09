@@ -22,34 +22,36 @@ var bot = new builder.UniversalBot(connector);
 
 const LuisModelUrl = 'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/b2fb8232-992d-4838-8caf-b6d05bfe08cc?subscription-key=7540fc2268fa47f7a57ea60184c2d7fb&timezoneOffset=0.0&verbose=true&q=';
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
-var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
+var dialog = new builder.IntentDialog({
+    recognizers: [recognizer]
+});
 bot.dialog('/', dialog);
 
 
 //Default handles case where user uploads image directly
-dialog.onDefault(function (session, args, next) {
-  var msg = session.message;
-  if (msg.attachments.length) {
-    // Message with attachment, proceed to perform query
-    var attachment = msg.attachments[0];
-    session.beginDialog('/imagequery', attachment.contentUrl);
-  } else {
-    //session.beginDialog('/imagequery', "https://bcattachmentsprod.blob.core.windows.net/636275016000000000/7BZ6LQ0RMFX/file_31.jpg");
-    session.send("Say Hi to get started!");
-  }
+dialog.onDefault(function(session, args, next) {
+    var msg = session.message;
+    if (msg.attachments.length) {
+        // Message with attachment, proceed to perform query
+        var attachment = msg.attachments[0];
+        session.beginDialog('/imagequery', attachment.contentUrl);
+    } else {
+        //session.beginDialog('/imagequery', "https://bcattachmentsprod.blob.core.windows.net/636275016000000000/7BZ6LQ0RMFX/file_31.jpg");
+        session.send("Say Hi to get started!");
+    }
 })
 
 //Dialog Matching
 dialog.matches('greetings', [
- (session) => {
-   session.beginDialog('/yuxfeatures');
+    (session) => {
+        session.beginDialog('/yuxfeatures');
     }
 ]);
 
 dialog.matches('help_features', [
-  (session) => {
-    session.beginDialog('/yuxfeatures');
-  }
+    (session) => {
+        session.beginDialog('/yuxfeatures');
+    }
 ]);
 
 //Dialogs
@@ -64,11 +66,13 @@ if (useEmulator) {
     });
     server.post('/api/messages', connector.listen());
 } else {
-  var listener = connector.listen();
-  var withLogging = function(context, req) {
-      console.log = context.log;
-      listener(context, req);
-  }
+    var listener = connector.listen();
+    var withLogging = function(context, req) {
+        console.log = context.log;
+        listener(context, req);
+    }
 
-  module.exports = { default: withLogging }
+    module.exports = {
+        default: withLogging
+    }
 }
