@@ -34,7 +34,7 @@ dialog.onDefault(function (session, args, next) {
     var attachment = msg.attachments[0];
     session.beginDialog('/imagequery', attachment.contentUrl);
   } else {
-
+    //session.beginDialog('/imagequery', "https://bcattachmentsprod.blob.core.windows.net/636275016000000000/7BZ6LQ0RMFX/file_31.jpg");
     session.send("Say Hi to get started!");
   }
 })
@@ -43,29 +43,14 @@ dialog.onDefault(function (session, args, next) {
 dialog.matches('greetings', [
  (session) => {
    session.beginDialog('/yuxfeatures');
-    //   if (session.userData.choice1) {
-    //     //User has already been profiled
-    //     session.beginDialog('/yuxfeatures');
-    //   } else {
-    //     //Starts profiling user
-    //     session.beginDialog('/profiling');
-    //   }
     }
 ]);
 
 //Dialog for handling image queries
 bot.dialog('/imagequery', getImage.getImage);
 
-//Dialog for deleting user's profile
-//dialog.matches(/^delete profile/i, deleteProfile.confirm);
-
-//Dialog for profiling of user
-//bot.dialog('/profiling', profiling.questions);
-
 //Dialog that describes the features of Yux
 bot.dialog('/yuxfeatures', help.yuxfeatures);
-
-
 
 if (useEmulator) {
     var restify = require('restify');

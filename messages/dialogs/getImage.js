@@ -10,6 +10,7 @@ const fakeurl = 'https://webchat.botframework.com/attachments/c8ca4c4b904d49e9a3
 let getImage = [
     function(session, args) {
         //Saves image url from args to dialogData
+        console.log("Args:" + args);
         session.dialogData.url = args || {};
         builder.Prompts.choice(session, "What kind of search would you like to perform?", ["Best combination", "Something similar"]);
     },
@@ -19,10 +20,10 @@ let getImage = [
             session.sendTyping();
 
 
-
         } else if (results.response.index == 1) {
             session.send("Please wait while I search for something similar...");
             session.sendTyping();
+            console.log(session.dialogData);
             console.log("Img Url: " + session.dialogData.url.toString());
             request({
               url: 'http://yuxmobilebackend.azurewebsites.net/api/retrieveSimilarClothings',
@@ -50,7 +51,7 @@ let getImage = [
                 var reply = new builder.Message(session)
                     .attachmentLayout(builder.AttachmentLayout.carousel)
                     .attachments(cardArray);
-                session.send(reply)
+                session.endDialog(reply)
               } else {
                 console.log(err);
                 console.log("Status: " + response.statusCode);
