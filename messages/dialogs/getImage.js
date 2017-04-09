@@ -23,7 +23,7 @@ let getImage = [
         } else if (results.response.index == 1) {
             session.send("Please wait while I search for something similar...");
             session.sendTyping();
-
+            console.log("Img Url: " + session.dialogData.url.toString());
             request({
               url: 'http://yuxmobilebackend.azurewebsites.net/api/retrieveSimilarClothings',
               method: 'POST',
