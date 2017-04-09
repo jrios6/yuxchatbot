@@ -52,8 +52,9 @@ let getImage = [
                     .attachments(cardArray);
                 session.send(reply)
               } else {
-                console.log(err)
-                session.endDialog("Sorry, there was an error. Please try again.")
+                console.log(err);
+                console.log("Status: " + response.statusCode);
+                session.endDialog("Sorry, there was an error. Please try again.");
               }
             });
         }
