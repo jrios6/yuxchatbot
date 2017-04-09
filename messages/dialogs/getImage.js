@@ -30,7 +30,7 @@ let getImage = [
                     console.log(body);
                     var style = body.outfit.style;
 
-                    session.send("Here are some " + style + " outfits:");
+                    session.send("The " + style + " style matches really with your choice of clothing!");
 
                     var cardArray1 = new Array();
                     var cardArray2 = new Array();
